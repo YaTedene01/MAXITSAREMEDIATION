@@ -5,15 +5,14 @@ use App\core\abstract\AbstractController;
 use App\core\App;
 use App\core\Validator;
 use App\service\UserService;
-use App\service\CompteService;
+
 class SecurityController extends AbstractController{
     private  UserService $userService;
-    private CompteService $compteService; 
+
     public function __construct(){
         parent::__construct();
         $this->layout='layout/securitylayout.html.php';
         $this->userService=App::getDependencie('userservice');
-        $this->compteService=App::getDependencie('compteservice');
     } 
 
   
@@ -44,22 +43,18 @@ class SecurityController extends AbstractController{
             if(Validator::isValide()){
            
             $user = $this->userService->connexion($login,$password);
-   
-            if($user&& $user->getPassword()===$password){
+            if($user&&
+            $user->getPassword()===$password){
 
-                $compte=$this->compteService->getCompte(4);
-                // var_dump('user');
-                // var_dump($user);die;
+            $this->session->set('user',$user->toArray());
 
-                $this->session->set('user',$user->toArray());
-                $this->session->set('solde',$compte["solde"]);
-                
+            $controller = new TransactionController();
 
-                $controller = new TransactionController();
 
-                // var_dump($controller->derniertransaction(4));die;
 
-                header('location:/compte');
+        var_dump($controller->derniertransaction(4));
+
+            header('location:/compte');
             }
             else{
 
@@ -77,7 +72,7 @@ class SecurityController extends AbstractController{
             header('location:/');
 
         }
-    }
+     }
           
    
     public function index(){
