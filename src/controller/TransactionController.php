@@ -18,10 +18,7 @@ class TransactionController extends AbstractController{
         }
         public function derniertransaction($idCompte){
             $transactions = $this->transactionService->transaction($idCompte);
-            // $solde = $this->session->get('solde');
-            // var_dump('solde',$solde);
-            // die;
-
+           
             $this->render('compte/compte.html.php', [
                 'transactions' => $transactions,
         ]);

@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'app/maxitsaremediation',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'd5adefe4c2405eaf1eb26e4ea7fd9178151e7058',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'app/maxitsaremediation' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'd5adefe4c2405eaf1eb26e4ea7fd9178151e7058',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -49,10 +49,10 @@ class SecurityController extends AbstractController{
             $this->session->set('user',$user->toArray());
 
             $controller = new TransactionController();
+            
 
 
-
-        var_dump($controller->derniertransaction(4));
+            var_dump($controller->derniertransaction(1));
 
             header('location:/compte');
             }
@@ -90,7 +90,7 @@ class SecurityController extends AbstractController{
    public function destroy(){
 
     $this->session->destroy();
-    header('location:'.WEB_ROUTE);
+    header('location:/');
    }
    public function store(){
    }

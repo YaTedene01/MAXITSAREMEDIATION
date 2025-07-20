@@ -32,8 +32,7 @@
                         <div class="bg-slate-800 text-white p-4 rounded-xl shadow-lg">
                             <div class="text-sm font-medium text-gray-300">Solde actuel</div>
                             <div class="text-2xl font-bold">
-                        <?= $solde ?>
-
+            <?= number_format($solde ?? 0, 0, ',', ' ') ?> FCFA
                             </div>
                         </div>
                         
@@ -132,6 +131,13 @@
             $iconBgClass = 'bg-orange-500';
             $amountClass = 'text-red-600';
         }
+        elseif($type==='retrait') {
+            // retrait = rouge
+            $gradientClass = 'from-orange-50 to-orange-100';
+            $borderClass = 'border-orange-500';
+            $iconBgClass = 'bg-orange-500';
+            $amountClass = 'text-red-600';
+        }
         }
         
         // Couleurs du statut
@@ -164,7 +170,7 @@
                         <?= htmlspecialchars($transaction->getTypeTransaction()) ?>
                     </div>
                     <div class="text-sm text-gray-600">
-                        <?= $isCredit ? 'Dépôt' : 'Paiement' ?>
+                        <?= $isCredit ? '': 'Paiement' ?>
                     </div>
                 </div>
             </div>

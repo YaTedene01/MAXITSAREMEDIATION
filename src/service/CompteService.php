@@ -17,11 +17,9 @@ class CompteService{
         return self::$instance;
    }
 
-    public function getCompte($idUser) {
-        
-       return $this?->compteRepository->getSolde($idUser);
-         
+   public function getSolde(int $idUser): ?float
+    {
+        return $this->compteRepository->getSolde($idUser); 
     }
-
 
 }

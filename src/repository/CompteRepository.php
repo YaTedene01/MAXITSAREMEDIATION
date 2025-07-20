@@ -18,17 +18,21 @@ class CompteRepository extends AbstractRepository{
         return self::$instance;
 
     } 
-    public function getSolde($idUser){
-        $sql="SELECT solde FROM $this->table WHERE iduser = :id AND TypeCompte = 'principal'";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $idUser);
-        $stmt->execute();
+    public function getSolde(int $idUser): ?float
+{
+    $sql = "SELECT solde 
+            FROM {$this->table} 
+            WHERE iduser = :id AND TypeCompte = 'principal'";
 
-        $solde = $stmt->fetch(\PDO::FETCH_ASSOC);
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':id', $idUser, \PDO::PARAM_INT);
+    $stmt->execute();
 
-        return $solde;
+    $solde = $stmt->fetch(\PDO::FETCH_ASSOC);
+        var_dump($solde); // DEBUG
+    return $solde ? (float)$solde['solde'] : null;
+}
 
-     }
     public function selectAll(){ 
 
      }

@@ -23,6 +23,32 @@ class CompteController extends AbstractController{
         
 
     //  }
+    public function solde($iduser)
+    {
+
+        // Vérifie si l'utilisateur est connecté
+        $user = $this->session->get('user');
+        if (!$user) {
+            header('location:/');
+            exit();
+        }
+
+        // Récupérer le solde via le service
+        $solde = $this->compteService->getSolde((int)$user['id']);
+        
+
+        // Passer les données à la vue
+        $this->render('compte/compte.html.php', [
+            'user'  => $user,
+            'solde' => $solde
+
+        ]);
+
+    }
+    
+
+
+    
 
     public function index(){
     }
@@ -30,6 +56,8 @@ class CompteController extends AbstractController{
         $this->render('compte/compte.html.php');
     }
     public function show(){
+        $this->render('transaction/transaction.html.php');
+
     }
     public function update(){
     }

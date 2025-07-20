@@ -22,6 +22,10 @@ return $routes=[
     '/deconnexion' =>['controller'=>SecurityController::class,
     'action'=>"destroy",
     'middlewares'=>[]
+     ],
+     '/transaction' =>['controller'=>CompteController::class,
+    'action'=>"show",
+    'middlewares'=>[]
     ]
 
 ];
