@@ -38,11 +38,9 @@ class CompteController extends AbstractController{
         
 
         // Passer les données à la vue
-        $this->render('compte/compte.html.php', [
-            'user'  => $user,
-            'solde' => $solde
 
-        ]);
+
+        
 
     }
     

@@ -40,11 +40,6 @@ try{
      libelle VARCHAR(30)
   
     );
-    INSERT INTO TypeUser VALUES
-    (1,'client');
-
-
-
 
 
   CREATE TABLE IF NOT EXISTS users(
@@ -60,10 +55,6 @@ try{
   idTypeUser INTEGER,
   Foreign Key (idTypeUser) REFERENCES TypeUser(id)
 );
-INSERT INTO users (nom, prenom, numeroTelephone, login, password, numeroCarteIdentite, photorecto, photoverso, idTypeUser) VALUES
-('faye', 'ndeye', '777571251', 'ndeye', '123', '2031009384432', 'recto.jpg', 'verso.jpg', 1),
-('faye', 'fatou', '770002211', 'fatou', '1234', '2031009385452', 'recto2.jpg', 'verso2.jpg', 1),
-('faye', 'yacine', '772225533', 'yacine', '12345', '2031009384444', 'recto3.jpg', 'verso3.jpg', 1);
 
 
 CREATE TABLE IF NOT EXISTS Compte(
@@ -75,10 +66,6 @@ CREATE TABLE IF NOT EXISTS Compte(
   idUser INTEGER,
   Foreign Key (idUser) REFERENCES users(id)
 );
-INSERT INTO Compte (dateCreation, solde, numero, typeCompte, idUser) VALUES
-('2025-07-01', 150000.00, 1001, 'principal', 1),
-('2025-07-02', 150000.00, 1002, 'secondaire', 1),
-('2025-07-03', 800000.00, 1003, 'principal', 1);
 
 
 CREATE TABLE IF NOT EXISTS Transaction(
@@ -90,10 +77,6 @@ CREATE TABLE IF NOT EXISTS Transaction(
   idCompte INTEGER ,
   Foreign Key (idCompte) REFERENCES Compte(id)
 );
-INSERT INTO Transaction (montant, dateTransaction, typeTransaction, statutTransaction,idCompte) VALUES
-(10000.00, '2025-07-04', 'depot', 'Echec',1),
-(5000.00, '2025-07-05', 'paiement','Annuler', 1),
-(2000.00, '2025-07-06', 'retrait','Reussi', 1);
 
 SQL;
 

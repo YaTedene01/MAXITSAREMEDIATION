@@ -1,6 +1,5 @@
 <?php
 namespace App\core;
-use App\controller\CompteController;
 use App\controller\SecurityController;
 use App\core\Database;
 use App\core\Router;

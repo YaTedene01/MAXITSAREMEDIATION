@@ -16,9 +16,9 @@ class TransactionController extends AbstractController{
             $this->transactionService=App::getDependencie('transactionservice');
             
         }
+        
         public function derniertransaction($idCompte){
             $transactions = $this->transactionService->transaction($idCompte);
-           
             $this->render('compte/compte.html.php', [
                 'transactions' => $transactions,
         ]);
