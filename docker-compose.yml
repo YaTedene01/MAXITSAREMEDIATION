@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=MAXITSAREMEDIATION
+      - DB_USER=yatedene
+      - DB_PASSWORD=faye0000
+      - DB_PORT=5432
+    ports:
+      - "8000:8000"
+    command: php -S 0.0.0.0:8000 -t public/
+
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=MAXITSAREMEDIATION
+      - POSTGRES_USER=yatedene
+      - POSTGRES_PASSWORD=faye0000
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
