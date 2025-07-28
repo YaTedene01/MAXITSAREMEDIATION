@@ -4,7 +4,7 @@ require_once __DIR__ . '/../app/config/env.php';
 
 
 try {
-$dsn ="pgsql:host=localhost;dbname=postgres;port=5432";
+    $dsn = "pgsql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";port=" . DB_PORT;
     $pdo = new PDO($dsn, DB_USER, DB_PASSWORD );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

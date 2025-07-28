@@ -1,0 +1,20 @@
+dependencies:
+  controllers:
+    SecurityController: App\controller\SecurityController
+    CompteController: App\controller\CompteController
+    TransactionController: App\controller\TransactionController
+  services:
+      CompteService: App\service\CompteService
+      UserService: App\service\UserService
+      TransactionService: App\service\TransactionService
+  repository:
+    UserRepository: App\repository\UserRepository
+    CompteRepository: App\repository\CompteRepository
+    TransactionRepository: App\repository\TransactionRepository
+  database:
+    Database: App\core\Database
+    PDO: PDO
+  session:
+    Session: App\core\Session
+  middlewares:
+    auth: App\core\middlewares\Auth

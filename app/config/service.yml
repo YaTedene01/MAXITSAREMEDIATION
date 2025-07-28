@@ -1,8 +1,0 @@
-core:
-  router: App\Core\Router
-  validator: App\Core\Validator\Validator
-  session: App\Core\Session
-
-services: {}
-
-repositories: {}

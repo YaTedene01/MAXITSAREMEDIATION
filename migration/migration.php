@@ -1,21 +1,22 @@
 <?php
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../app/config/env.php';
 
 $dbname= DB_NAME;
 $dbuser=DB_USER;
 $dbpassword=DB_PASSWORD;
 $webroute=WEB_ROUTE;
+$dbport=DB_PORT;
 try{ 
     //connexion server
-    $pdo= new \PDO("pgsql:host=" . WEB_ROUTE . ";port=5432;dbname=postgres",$dbuser,$dbpassword);
+    $pdo= new \PDO("pgsql:host=" . $webroute . ";port=" . $dbport . ";dbname=" . $dbname, $dbuser, $dbpassword);
     $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     //connexion base de donnees
     $pdo->exec("DROP DATABASE IF EXISTS $dbname");
     $pdo->exec("CREATE DATABASE $dbname");
     echo"Base de données '$dbname' créee.\n";
     //reconnexion
-    $pdo= new \PDO("pgsql:host=" . WEB_ROUTE . ";port=5432;dbname=postgres",$dbuser,$dbpassword);
+    $pdo= new \PDO("pgsql:host=" . $webroute . ";port=" . $dbport . ";dbname=" . $dbname, $dbuser, $dbpassword);
     $pdo->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_EXCEPTION);
     //requete sql
     $sql = <<<SQL

@@ -8,7 +8,7 @@ class Router{
         if (array_key_exists($uri, $routes)){
             $controller = $routes[$uri]['controller'];
             $action = $routes[$uri]['action'];
-            $controller = new $controller();
+            $controller = App::getDependency('controllers', $controller);
             $controller->$action();
         }
         

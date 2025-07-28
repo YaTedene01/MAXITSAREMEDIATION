@@ -2,20 +2,21 @@
 namespace App\service;
 
 use App\core\App;
+use App\core\Singleton;
 use App\repository\CompteRepository;
 
-class CompteService{
+class CompteService extends Singleton{
     private  static CompteRepository $compteRepository;
     private static ?CompteService $instance = null;
-        private  function __construct(){
+        public  function __construct(CompteRepository $compteRepository){
 
-        $this->compteRepository = App::getDependencie('compterepository');
+        $this->compteRepository =$compteRepository ;
     }
-    public static function getInstance(){
-    if(self::$instance === null)
-        self::$instance = new self();
-        return self::$instance;
-   }
+//     public static function getInstance(){
+//     if(self::$instance === null)
+//         self::$instance = new self();
+//         return self::$instance;
+//    }
 
    public function getSolde(int $idUser): ?float
     {

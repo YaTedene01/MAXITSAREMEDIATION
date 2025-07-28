@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\core\abstract\AbstractController;
 use App\core\App;
+use App\core\Session;
 use App\service\TransactionService;
 
 //require_once dirname(__DIR__,2).'/vendor/autoload.php';
@@ -11,9 +12,10 @@ use App\service\TransactionService;
 class TransactionController extends AbstractController{
         private  TransactionService $transactionService;
         
-        public function __construct(){
-            parent::__construct();
-            $this->transactionService=App::getDependencie('transactionservice');
+        public function __construct(TransactionService $transactionService, Session $session){
+            parent::__construct($session);
+             $this->transactionService = $transactionService;
+
             
         }
         
@@ -25,11 +27,15 @@ class TransactionController extends AbstractController{
         
 
      }
+
     public function index(){
     }
     public function create(){
+        $this->render('transaction/paiement.html.php');
     }
     public function show(){
+         $this->render('transaction/woyofal.html.php');
+
     }
     public function update(){
     }

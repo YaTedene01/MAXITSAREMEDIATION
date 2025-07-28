@@ -2,8 +2,9 @@
 namespace App\core\abstract;
 
 use App\core\Database;
+use App\core\Singleton;
 
-abstract class AbstractRepository{
+abstract class AbstractRepository extends Singleton{
     protected $pdo;
     public function __construct(){
         $this->pdo = Database::getInstance()->getConnexion();

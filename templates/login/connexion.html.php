@@ -18,8 +18,8 @@
                 <input type="tel" class="w-full px-4 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base" name="login" placeholder="Entrez votre login">
                 <small class="text-red-500">
                     <?php
-                        if (empty($_SESSION['error']['login']) ) {
-                            echo $_SESSION['error']['login'];
+                        if (isset($_SESSION['error']['login'])) {
+                            echo htmlspecialchars($_SESSION['error']['login']);
                         }
                     ?>
                 </small>
@@ -31,9 +31,8 @@
                 <input type="password" class="w-full px-4 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base" name="password" placeholder="Entrez votre mot de passe">
                  <small class="text-red-500">
                     <?php
-                        if (($_SESSION['error']['password'])) {
-                            # code...
-                            echo $_SESSION['error']['password'];
+                        if (isset($_SESSION['error']['password'])) {
+                            echo htmlspecialchars($_SESSION['error']['password']);
                         }
                     ?>
                 </small>

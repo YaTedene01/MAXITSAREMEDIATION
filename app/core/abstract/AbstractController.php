@@ -8,8 +8,8 @@ abstract class AbstractController{
     
     protected string $layout='layout/baselayout.html.php';
     protected Session $session ;
-    public function __construct(){
-        $this->session= App::getDependencie('session');
+    public function __construct(Session $session ){
+        $this->session= $session;
     }
     public function render($view,$data=[]){
         ob_start();

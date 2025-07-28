@@ -63,11 +63,13 @@
                 </div>
                 
                 <div class="bg-white rounded-2xl shadow-lg p-4 text-center hover:shadow-xl transition-all duration-200">
+                    <a href="/paiement">
                     <div class="bg-orange-500 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 shadow-lg">
                         <i class="fas fa-credit-card text-white text-lg"></i>
                     </div>
                     <div class="text-sm font-bold text-black">Paiement</div>
                     <div class="text-xs text-gray-500 mt-1">Régler facture</div>
+                    </a>
                 </div>
                 
                 <div class="bg-white rounded-2xl shadow-lg p-4 text-center hover:shadow-xl transition-all duration-200">

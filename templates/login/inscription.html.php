@@ -16,7 +16,7 @@
         </div>
 
         <!-- Formulaire -->
-        <form action="/login" method="post" class="space-y-4">
+        <form action="/inscription" method="post" class="space-y-4">
             <!-- Nom et Prénom -->
             <div class="grid grid-cols-2 gap-3">
                 <div>

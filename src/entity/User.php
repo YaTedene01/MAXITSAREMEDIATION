@@ -7,20 +7,18 @@ class User{
     private string $prenom;
     private string $numeroCarteIdentite;
     private Array $numeroTelephone=[];
-    private string $Adresse ;
     private ?TypeUser $typeUser = null;
     private Array $compte=[];
     private string $photorecto;
     private string $photoverso;
     private string $login;
     private string $password;
-    public function __construct(int $id=0,string $nom='',string $prenom='',string $numeroCarteIdentite='',string $Adresse='',string $photorecto="",string $photoverso="",string $login='',string $password='')
+    public function __construct(int $id=0,string $nom='',string $prenom='',string $numeroCarteIdentite='',string $photorecto="",string $photoverso="",string $login='',string $password='')
     {
         $this->id = $id;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->numeroCarteIdentite = $numeroCarteIdentite;
-        $this->Adresse = $Adresse;
         // $this->typeUser = new TypeUser();
         $this->photorecto = $photorecto;
         $this->photoverso = $photoverso;
@@ -57,12 +55,7 @@ class User{
         public function addNumeroTelephone(Array $numeroTelephone):void{
             $this->numeroTelephone = $numeroTelephone;
         }
-        public function getAdresse(): string{
-            return $this->Adresse;
-        }
-        public function setAdresse(string $Adresse): void{
-            $this->Adresse= $Adresse;
-         }
+        
         public function getTypeUser(): TypeUser{
             return $this->typeUser;
         }
@@ -109,8 +102,10 @@ class User{
                 $data['numerotelephone'],
                 $data['photorecto'],
                 $data['photoverso'],
-                $data['login'],
-                $data['password']
+                $data['password'],
+                
+        
+
         
             );
             //  var_dump($data);
@@ -125,7 +120,6 @@ class User{
                 'nom' => $this->nom,
                 'prenom' => $this->prenom,
                 'numeroCarteIdentite' => $this->numeroCarteIdentite,
-                'Adresse' => $this->Adresse,
                 'typeUser' => $this->typeUser ? $this->typeUser->toArray() : null,
                 'compte' => array_map(fn($comptes) => $comptes->toArray(), $this->compte),
                 'photorecto' => $this->photorecto,

@@ -1,52 +1,91 @@
 <?php
+
 namespace App\core;
-use App\controller\SecurityController;
-use App\core\Database;
-use App\core\Router;
-use App\repository\UserRepository;
-use App\service\UserService;
-use App\core\Session;
-use App\repository\CompteRepository;
-use App\repository\TransactionRepository;
-use App\service\CompteService;
-use App\service\TransactionService;
 
-class App{
-    private static Array  $dependencies=[];
-    public static function init(){
+use Symfony\Component\Yaml\Yaml;
+use ReflectionClass;
 
-        self::registerDependance('router' , (new Router()));
-        self::registerDependance('database' , Database::getInstance());
-        self::registerDependance('userrepository' , UserRepository::getInstance());
+class App {
+    private static array $config = [];
+    private static array $instances = [];
 
-        self::registerDependance('userservice' , UserService::getInstance());
-        self::registerDependance('session',Session::getInstance());
-        self::registerDependance('transactionrepository',TransactionRepository::getInstance());
-        self::registerDependance('transactionservice',TransactionService::getInstance());
-        self::registerDependance('compterepository',CompteRepository::getInstance());
-        self::registerDependance('compteservice',CompteService::getInstance());
-
-
-
-
-
-    }
-    public static function getDependencie($key){
-
-        // var_dump(self::$dependencies); die;
-        if(array_key_exists($key,self::$dependencies)){
-            return self::$dependencies[$key];
-        }
-        throw new \Error('Dependance non trouvée...');      
-    }
-
-    public static function registerDependance($key , $dependence){
-        if (!array_key_exists($key , self::$dependencies)) {
-            # code...
-            self::$dependencies[$key] = $dependence;
-        }else{
-            return null;
+    public static function loadDependenciesFromYaml(string $file) {
+        if (file_exists($file)) {
+            $data = Yaml::parseFile($file);
+            self::$config = $data['dependencies'] ?? [];
+            // var_dump(self::$config); die;
         }
     }
 
+    public static function getDependency(string $category, string $key) {
+        // Vérifie si la dépendance existe dans la config
+        if (!isset(self::$config[$category][$key])) {
+        // Essaye juste le nom court (ex: SecurityController)
+        $shortKey = substr(strrchr($key, "\\"), 1); 
+        // var_dump($shortKey); die;
+        if (!isset(self::$config[$category][$shortKey])) {
+            throw new \Exception("Dépendance '$key' introuvable dans la catégorie '$category'");
+        }
+        $key = $shortKey;
+    }
+
+        $className = self::$config[$category][$key];
+
+        // Si déjà instanciée, on la renvoie
+        if (isset(self::$instances[$className])) {
+            return self::$instances[$className];
+        }
+
+        // Si la classe n'existe pas
+        if (!class_exists($className)) {
+            throw new \Exception("Classe $className introuvable");
+        }
+
+        $reflector = new ReflectionClass($className);
+        $constructor = $reflector->getConstructor();
+
+        if (!$constructor) {
+            $instance = new $className();
+        } else {
+            $params = $constructor->getParameters();
+            $dependencies = [];
+
+            foreach ($params as $param) {
+                $type = $param->getType();
+                if ($type && !$type->isBuiltin()) {
+                    // Recherche la dépendance dans toutes les catégories
+                    $depClass = $type->getName();
+                    $found = false;
+                    foreach (self::$config as $cat => $deps) {
+                        // var_dump(self::$config, $cat, $deps, $depClass); die;
+                        $depKey = array_search($depClass, $deps, true);
+                        if ($depKey !== false) {
+                            $dependencies[] = self::getDependency($cat, $depKey);
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        $dependencies[] = null;
+                    }
+                } else {
+                    if($className==='PDO'){
+                        $dependencies =[DSN, DB_USER,DB_PASSWORD];
+                        break;
+                    };
+                    $dependencies[] = $param->isDefaultValueAvailable()
+                        ? $param->getDefaultValue()
+                        : null;
+                }
+            }
+            if (method_exists($className, 'getInstance')) {
+                $instance = $className::getInstance(...$dependencies);
+            } else {
+                $instance = $reflector->newInstanceArgs($dependencies);
+            }
+        }
+
+        self::$instances[$className] = $instance;
+        return $instance;
+    }
 }

@@ -9,17 +9,17 @@ class TransactionRepository extends AbstractRepository{
 
     
     private $table='Transaction';
-    private function __construct(){
-        parent::__construct();
+    protected function __construct() {
+        $this->pdo = \App\core\Database::getInstance()->getConnexion();
     }
-    public static function getInstance(){
-        if(is_null (self::$instance)){
-           self::$instance=new self();
+    // public static function getInstance(){
+    //     if(is_null (self::$instance)){
+    //        self::$instance=new self();
 
-        }
-        return self::$instance;
+    //     }
+    //     return self::$instance;
 
-    }
+    // }
 
     public function getTransaction($idCompte){
         $sql="SELECT * FROM $this->table WHERE idcompte = :idCompte   ORDER BY id DESC";

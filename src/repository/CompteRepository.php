@@ -7,17 +7,17 @@ use App\entity\Compte;
 class CompteRepository extends AbstractRepository{
     private static ?CompteRepository $instance=null;
     private $table='Compte';
-    private function __construct(){
-        parent::__construct();
+    protected function __construct() {
+        $this->pdo = \App\core\Database::getInstance()->getConnexion();
     }
-    public static function getInstance(){
-        if(is_null (self::$instance)){
-           self::$instance=new self();
+    // public static function getInstance(){
+    //     if(is_null (self::$instance)){
+    //        self::$instance=new self();
 
-        }
-        return self::$instance;
+    //     }
+    //     return self::$instance;
 
-    } 
+    // } 
     public function getSolde(int $idUser): ?float
 {
     $sql = "SELECT solde 

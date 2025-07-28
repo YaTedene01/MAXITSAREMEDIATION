@@ -1,15 +1,16 @@
 <?php
 namespace App\controller;
-use App\core\abstract\AbstractController;
 use App\core\App;
+use App\core\Session;
 use App\service\CompteService;
+use App\core\abstract\AbstractController;
 
 class CompteController extends AbstractController{
     private  CompteService $compteService;
-    public function __construct(){
+    public function __construct(CompteService $compteService, Session $session){
+        parent::__construct($session);
+            $this->compteService = $compteService;
 
-            parent::__construct();
-            $this->compteService=App::getDependencie('compteservice');
             
         }
         // public function solde($idUser){
