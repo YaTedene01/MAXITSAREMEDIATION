@@ -2,49 +2,35 @@
 namespace App\Core;
 
 use PDO;
+use PDOException;
 
-class Database{
+class Database {
+    private ?PDO $pdo = null;
+    private static ?Database $instance = null;
     
-    private static ?Database $instance= null;
-    private string $host;
-    private string $port;
-    private string $dbname;
-    private string $user;
-    private string $pwd;
-    private string $dsn;
-
-
-    private PDO $pdo;
-    private function __construct()
-    {
-
-        // $this->host='localhost';
-        // $this->port='5432';
-        // $this->dbname='MAXITSAREMEDIATION';
-        // $this->user='yatedene';
-        // $this->pwd='faye0000';
-        // $this->dsn="pgsql:host='$this->host';port=$this->port;dbname=$this->dbname";
-        $this->user=DB_USER;
-        $this->pwd=DB_PASSWORD;
-        $this->dsn=DSN;
-
+    private function __construct() {
+        try {
+            $dsn = $_ENV['DSN'] ?? "pgsql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";port=" . $_ENV['DB_PORT'];
+            $username = $_ENV['DB_USER'];
+            $password = $_ENV['DB_PASSWORD'];
+            
+            $this->pdo = new PDO($dsn, $username, $password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
+        } catch (PDOException $e) {
+            throw new \Exception("Connection failed: " . $e->getMessage());
+        }
     }
     
-    public static function getInstance(){
-        if (is_null(self::$instance)){
-            self::$instance=new self();
+    public static function getInstance(): Database {
+        if (self::$instance === null) {
+            self::$instance = new self();
         }
         return self::$instance;
     }
-   public function getConnexion() {
     
-    try {
-    $this->pdo= new PDO($this->dsn,$this->user,$this->pwd);
-       
-    } catch (\Throwable $th) {
-       
+    public function getConnexion(): PDO {
+        return $this->pdo;
     }
-    return $this->pdo;
-   }
-
- }
+}
