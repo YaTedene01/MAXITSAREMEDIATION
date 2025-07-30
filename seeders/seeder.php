@@ -12,10 +12,10 @@ try {
 
     // typeuser
     $stmt = $pdo->prepare("
-    INSERT INTO TypeUser VALUES
-    (?,?);
+    INSERT INTO TypeUser (libelle) VALUES
+    (?);
     ");
-    $stmt->execute([2,'client']);
+    $stmt->execute(['client']);
     //users
     $stmt = $pdo->prepare(" 
     INSERT INTO users (nom, prenom, numeroTelephone, login, password, numeroCarteIdentite, photorecto, photoverso, idTypeUser) VALUES

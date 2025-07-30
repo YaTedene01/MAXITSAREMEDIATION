@@ -25,6 +25,10 @@ WORKDIR /var/www/html
 # Install dependencies
 RUN composer install --no-interaction
 
-EXPOSE 8000
+RUN echo "DB_USER=\${DB_USER}" > .env && \
+    echo "DB_PASSWORD=\${DB_PASSWORD}" >> .env && \
+    echo "DSN=\${DSN}" >> .env
+
+EXPOSE 9000
 
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public/"]

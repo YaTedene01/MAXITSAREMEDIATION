@@ -12,8 +12,8 @@ services:
       - DB_NAME=MAXITSAREMEDIATION
       - DB_USER=yatedene
       - DB_PASSWORD=faye0000
-      - DB_PORT=5432
-      - DSN=pgsql:host=db;dbname=MAXITSAREMEDIATION;port=5432
+      - DB_PORT=5435  # Updated to use port 5435
+      - DSN=pgsql:host=db;dbname=MAXITSAREMEDIATION;port=5435
     ports:
       - "8000:8000"
     command: php -S 0.0.0.0:8000 -t public/
@@ -21,7 +21,7 @@ services:
   db:
     image: postgres:14
     ports:
-      - "5432:5432"
+      - "5435:5432"  # Changed to use port 5435
     environment:
       - POSTGRES_DB=MAXITSAREMEDIATION
       - POSTGRES_USER=yatedene

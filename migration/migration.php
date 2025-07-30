@@ -2,22 +2,33 @@
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../app/config/env.php';
 
-$dbname= DB_NAME;
-$dbuser=DB_USER;
-$dbpassword=DB_PASSWORD;
-$webroute=WEB_ROUTE;
-$dbport=DB_PORT;
-try{ 
-    //connexion server
-    $pdo= new \PDO("pgsql:host=" . $webroute . ";port=" . $dbport . ";dbname=" . $dbname, $dbuser, $dbpassword);
+$dbname = DB_NAME;
+$dbuser = DB_USER;
+$dbpassword = DB_PASSWORD;
+$webroute = WEB_ROUTE;
+$dbport = DB_PORT;
+
+try {
+    // Connexion à la base postgres par défaut pour pouvoir supprimer/créer la base railway
+    $pdo = new \PDO("pgsql:host=" . $webroute . ";port=" . $dbport . ";dbname=postgres", $dbuser, $dbpassword);
     $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    //connexion base de donnees
+    
+    // Fermer toutes les connexions existantes à la base de données
+    $sql = "SELECT pg_terminate_backend(pg_stat_activity.pid)
+            FROM pg_stat_activity
+            WHERE pg_stat_activity.datname = '$dbname'
+            AND pid <> pg_backend_pid()";
+    $pdo->exec($sql);
+    
+    // Maintenant on peut supprimer et recréer la base
     $pdo->exec("DROP DATABASE IF EXISTS $dbname");
     $pdo->exec("CREATE DATABASE $dbname");
-    echo"Base de données '$dbname' créee.\n";
-    //reconnexion
-    $pdo= new \PDO("pgsql:host=" . $webroute . ";port=" . $dbport . ";dbname=" . $dbname, $dbuser, $dbpassword);
-    $pdo->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_EXCEPTION);
+    echo "Base de données '$dbname' créée.\n";
+    
+    // Connexion à la nouvelle base pour créer les tables
+    $pdo = new \PDO("pgsql:host=" . $webroute . ";port=" . $dbport . ";dbname=" . $dbname, $dbuser, $dbpassword);
+    $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    
     //requete sql
     $sql = <<<SQL
     --Enum

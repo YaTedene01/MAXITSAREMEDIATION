@@ -2,61 +2,44 @@
 namespace App\Core;
 
 use PDO;
-use PDOException;
 
-class Database {
-    private ?PDO $pdo = null;
-    private static ?Database $instance = null;
+class Database{
     
-    private function __construct() {
-        $maxRetries = 3;
-        $retryDelay = 2;
-        
-        for ($i = 0; $i < $maxRetries; $i++) {
-            try {
-                $dsn = $_ENV['DSN'] ?? sprintf(
-                    "pgsql:host=%s;dbname=%s;port=%s",
-                    $_ENV['DB_HOST'],
-                    $_ENV['DB_NAME'],
-                    $_ENV['DB_PORT']
-                );
-                
-                $this->pdo = new PDO(
-                    $dsn,
-                    $_ENV['DB_USER'],
-                    $_ENV['DB_PASSWORD'],
-                    [
-                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                        PDO::ATTR_TIMEOUT => 5
-                    ]
-                );
-                
-                // Test la connexion
-                $this->pdo->query('SELECT 1');
-                break;
-                
-            } catch (PDOException $e) {
-                if ($i === $maxRetries - 1) {
-                    throw new \Exception(sprintf(
-                        "Impossible de se connecter à la base de données après %d tentatives. Erreur: %s",
-                        $maxRetries,
-                        $e->getMessage()
-                    ));
-                }
-                sleep($retryDelay);
-            }
-        }
+    private static ?Database $instance= null;
+    private string $host;
+    private string $port;
+    private string $dbname;
+    private string $user;
+    private string $pwd;
+    private string $dsn;
+
+
+    private PDO $pdo;
+    private function __construct()
+    {
+        $this->user=DB_USER;
+        $this->pwd=DB_PASSWORD;
+        $this->dsn=DSN;
+
     }
     
-    public static function getInstance(): Database {
-        if (self::$instance === null) {
-            self::$instance = new self();
+    public static function getInstance(){
+        if (is_null(self::$instance)){
+            self::$instance=new self();
         }
         return self::$instance;
     }
+   public function getConnexion() {
     
-    public function getConnexion(): PDO {
+    try {
+        if (!isset($this->pdo)) {
+            $this->pdo = new PDO($this->dsn, $this->user, $this->pwd);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }
         return $this->pdo;
+    } catch (\PDOException $e) {
+        throw new \PDOException("Connection failed: " . $e->getMessage());
     }
-}
+   }
+
+ }
