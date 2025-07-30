@@ -9,17 +9,43 @@ class Database {
     private static ?Database $instance = null;
     
     private function __construct() {
-        try {
-            $dsn = $_ENV['DSN'] ?? "pgsql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";port=" . $_ENV['DB_PORT'];
-            $username = $_ENV['DB_USER'];
-            $password = $_ENV['DB_PASSWORD'];
-            
-            $this->pdo = new PDO($dsn, $username, $password, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            ]);
-        } catch (PDOException $e) {
-            throw new \Exception("Connection failed: " . $e->getMessage());
+        $maxRetries = 3;
+        $retryDelay = 2;
+        
+        for ($i = 0; $i < $maxRetries; $i++) {
+            try {
+                $dsn = $_ENV['DSN'] ?? sprintf(
+                    "pgsql:host=%s;dbname=%s;port=%s",
+                    $_ENV['DB_HOST'],
+                    $_ENV['DB_NAME'],
+                    $_ENV['DB_PORT']
+                );
+                
+                $this->pdo = new PDO(
+                    $dsn,
+                    $_ENV['DB_USER'],
+                    $_ENV['DB_PASSWORD'],
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_TIMEOUT => 5
+                    ]
+                );
+                
+                // Test la connexion
+                $this->pdo->query('SELECT 1');
+                break;
+                
+            } catch (PDOException $e) {
+                if ($i === $maxRetries - 1) {
+                    throw new \Exception(sprintf(
+                        "Impossible de se connecter à la base de données après %d tentatives. Erreur: %s",
+                        $maxRetries,
+                        $e->getMessage()
+                    ));
+                }
+                sleep($retryDelay);
+            }
         }
     }
     
